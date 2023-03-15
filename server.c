@@ -44,7 +44,6 @@ int main (int argc, const char * argv[]) {
 	sa.sin6_port = htons(port_number);	
         
     
-    
 	if ((rc = bind(welcome_socket, (struct sockaddr*)&sa, sizeof(sa))) < 0)
 	{
 		perror("ERROR: bind");
@@ -73,19 +72,12 @@ int main (int argc, const char * argv[]) {
 				res = recv(comm_socket, buff, 1024,0);
                 if (res <= 0)                
                     break;
-
-
-
 				printf("%s\n", buff);
 			
 				//test read and send message back
 				if(strstr(buff,"kecup")!=NULL){
 				strncpy(buff,"hranolky",1024);
-				}
-
-			
-
-                                                			
+				}                            			
 			    send(comm_socket, buff, strlen(buff), 0);
 			}
 		}
