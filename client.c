@@ -43,8 +43,6 @@ int main (int argc, char * argv[]) {
      
     /* 1. test vstupnich parametru: */
 
-
-
     if (argc != 7) {
        print_error_parsing_argument();
     }
@@ -74,39 +72,31 @@ int main (int argc, char * argv[]) {
                   printf("protokol byl zadán špatně\n");
                   print_error_parsing_argument();
                 }
-                break;
-                
+                break;  
         default:
             print_error_parsing_argument();
         }
     }
 
-
-        if(p == -1){
-          printf("argument -p je povinný");
-         print_error_parsing_argument();
-        }
-        if(h == -1){
-          printf("argument -h je povinný");
-          print_error_parsing_argument();
-        }
-        if(m == -1){
-          printf("argument -m je povinný");
-          print_error_parsing_argument();
-        }
+    if(p == -1){
+      printf("argument -p je povinný");
+      print_error_parsing_argument();
+    }
+    if(h == -1){
+      printf("argument -h je povinný");
+      print_error_parsing_argument();
+    }
+    if(m == -1){
+      printf("argument -m je povinný");
+      print_error_parsing_argument();
+    }
 
 
     // TODO ověření server hostname a portnumber
 
 
 
-
-
-
-
-
-
-       port_number = atoi(argv[2]);
+    port_number = atoi(argv[2]);
 
     //protocol selection
 
