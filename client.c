@@ -160,7 +160,7 @@ int main (int argc, char * argv[]) {
         }
 
         strcat(buf, tmp_buf);
-        memset(buf,0,sizeof(buf));
+        memset(tmp_buf,0,sizeof(tmp_buf));
       }
       
       if (connect(client_socket, (const struct sockaddr *) &server_address, sizeof(server_address)) != 0)
