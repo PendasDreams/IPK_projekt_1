@@ -93,10 +93,7 @@ int main (int argc, char * argv[]) {
 
 
     // TODO ověření server hostname a portnumber
-
-
-
-    port_number = atoi(argv[2]);
+    
 
     //protocol selection
 
