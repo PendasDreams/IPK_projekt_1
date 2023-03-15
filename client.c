@@ -93,7 +93,7 @@ int main (int argc, char * argv[]) {
 
 
     // TODO ověření server hostname a portnumber
-    
+
 
     //protocol selection
 
@@ -101,7 +101,7 @@ int main (int argc, char * argv[]) {
     //////////////////////////////////////////////////////////////////////////////////////
     //                                  UDP 
 
-    if(strcmp(argv[3] ,"udp")== 0)
+    if(mode == UDP_MODE)
     {
       /* 2. ziskani adresy serveru pomoci DNS */
       
