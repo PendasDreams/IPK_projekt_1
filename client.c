@@ -16,6 +16,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #define BUFSIZE 1024
 #define TCP_MODE 1
@@ -29,6 +30,7 @@ int main (int argc, char * argv[]) {
     struct hostent *server;
     struct sockaddr_in server_address;
     char buf[BUFSIZE];
+    char tmp_buf[BUFSIZE];
     int opt;
     int mode = 0;
     int p = -1;
@@ -39,6 +41,18 @@ int main (int argc, char * argv[]) {
       fprintf(stderr, "usage: %s ipkcpc -h <host> -p <port> -m <mode>\n", argv[0]);
       exit(EXIT_FAILURE);
    }
+
+   int countString(const char *haystack, const char *needle){
+      int count = 0;
+      const char *tmp = haystack;
+      while(tmp = strstr(tmp, needle))
+      {
+          count++;
+          tmp++;
+      }
+      return count;
+}
+
 
      
     /* 1. test vstupnich parametru: */
@@ -127,9 +141,27 @@ int main (int argc, char * argv[]) {
     }
         
       /* nacteni zpravy od uzivatele */
-      bzero(buf, BUFSIZE);
+
+    bool finish_massage = false;
+    int count_subs = 0;
+
+
+      bzero(buf, BUFSIZE);      
       printf("Please enter msg: ");
-      fgets(buf, BUFSIZE, stdin);
+
+      //read line by line and put it to buffer
+      while(finish_massage != true)
+      {
+        fgets(tmp_buf, BUFSIZE, stdin);
+
+        if(tmp_buf[0] =='\n'){
+          strcat(buf, tmp_buf);
+          break;
+        }
+
+        strcat(buf, tmp_buf);
+        memset(buf,0,sizeof(buf));
+      }
       
       if (connect(client_socket, (const struct sockaddr *) &server_address, sizeof(server_address)) != 0)
       {
