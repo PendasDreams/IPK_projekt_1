@@ -36,7 +36,7 @@ int main (int argc, char * argv[]) {
     int p = -1;
     int h = -1;
     int m = -1;
-    
+
    
    int print_error_parsing_argument(){
       fprintf(stderr, "usage: %s ipkcpc -h <host> -p <port> -m <mode>\n", argv[0]);
@@ -55,6 +55,7 @@ int main (int argc, char * argv[]) {
 }
 
 
+     
      
     /* 1. test vstupnich parametru: */
 
