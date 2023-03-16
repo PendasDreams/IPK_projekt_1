@@ -1,5 +1,5 @@
 build:	
 	gcc server.c -o server
-	gcc client.c -o client
+	gcc ipkcp.c -o ipkcp
 clean:
-	rm server client
+	rm server ipkcp
