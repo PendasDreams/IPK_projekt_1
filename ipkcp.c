@@ -7,7 +7,7 @@
  *
  */
  
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,6 +24,8 @@
 #define UDP_MODE 2
 
 
+
+
 int main (int argc, char * argv[]) {
 	int client_socket, port_number, bytestx, bytesrx;
     socklen_t serverlen;
@@ -32,6 +34,7 @@ int main (int argc, char * argv[]) {
     struct sockaddr_in server_address;
     char buf[BUFSIZE];
     char tmp_buf[BUFSIZE];
+    char tmp_buf_msg[BUFSIZE];
     int opt;
     int mode = 0;
     int p = -1;
@@ -156,14 +159,31 @@ int main (int argc, char * argv[]) {
       {
         fgets(tmp_buf, BUFSIZE, stdin);
 
-        if(tmp_buf[0] =='5'){
+        if(tmp_buf[0] =='\n'){
           strcat(buf, tmp_buf);
           break;
         }
 
-        strcat(buf, tmp_buf);
+        strcat(tmp_buf_msg, tmp_buf);
         memset(tmp_buf,0,sizeof(tmp_buf));
       }
+
+
+      int a = 23;
+      char c = a+'0';
+
+      buf[0] ='1';
+      buf[1] = c;
+
+
+      strcat(buf, tmp_buf_msg);
+
+
+
+      
+
+
+
       
       if (connect(client_socket, (const struct sockaddr *) &server_address, sizeof(server_address)) != 0)
       {
@@ -201,7 +221,7 @@ int main (int argc, char * argv[]) {
     
     
     
-     }
+    }
 
      return 0;
 
