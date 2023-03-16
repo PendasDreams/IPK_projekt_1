@@ -55,8 +55,7 @@ int main (int argc, char * argv[]) {
 }
 
 
-     
-     
+
     /* 1. test vstupnich parametru: */
 
     if (argc != 7) {

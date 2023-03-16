@@ -7,6 +7,7 @@
  *
  */
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +25,7 @@ int main (int argc, const char * argv[]) {
 	char str[INET6_ADDRSTRLEN];
     int port_number;
     
-	
+
     if (argc != 2) {
        fprintf(stderr,"usage: %s <port>\n", argv[0]);
        exit(EXIT_FAILURE);
