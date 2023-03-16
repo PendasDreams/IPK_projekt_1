@@ -36,6 +36,7 @@ int main (int argc, char * argv[]) {
     int p = -1;
     int h = -1;
     int m = -1;
+    
    
    int print_error_parsing_argument(){
       fprintf(stderr, "usage: %s ipkcpc -h <host> -p <port> -m <mode>\n", argv[0]);
@@ -154,7 +155,7 @@ int main (int argc, char * argv[]) {
       {
         fgets(tmp_buf, BUFSIZE, stdin);
 
-        if(tmp_buf[0] =='\n'){
+        if(tmp_buf[0] =='5'){
           strcat(buf, tmp_buf);
           break;
         }
