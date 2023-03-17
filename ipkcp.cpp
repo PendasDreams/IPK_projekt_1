@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
@@ -21,6 +22,9 @@
 #include <iostream>
 #include <sstream>
 #include <bits/stdc++.h>
+#include <bits/stdc++.h>
+#include <bitset>
+#include <math.h>
 using namespace std;
 std::ostringstream oss;
 
@@ -37,9 +41,73 @@ std::ostringstream oss;
       exit(EXIT_FAILURE);
    }
 
+int changeEvenBits(int n)
+{
+    // To store sum of bits
+    // at even positions.
+    int to_subtract = 0;
+ 
+    // To store bits to shift
+    int m = 0;
+ 
+    // One by one put all even
+    // bits to end
+    for (int x = n; x; x >>= 2) {
+        // If current last bit
+        // is set, add it to ans
+        if (x & 1)
+            to_subtract += (1 << m);
+ 
+        // Next shift position
+        m += 2;
+    }
+ 
+    return n - to_subtract;
+}
 
-int HexToDec(string n) { return stoi(n, 0, 16); }
 
+
+char convertToBinary(unsigned int n)
+{
+    int i = 0;
+    char binary_a [9];
+
+    if (n / 2 != 0) {
+        convertToBinary(n / 2);
+        i++;
+    }
+    int str_1 = n % 2;
+    char nuller[1] = {str_1 +'0'};
+    strcat(binary_a, nuller);
+    i++;
+
+    if(i >= 8){
+    
+    char bin_final = strtol(binary_a, 0, 2);
+
+    return bin_final;
+    
+
+    }
+}
+
+void string2hexString(char* input, char* output)
+{
+    int loop;
+    int i; 
+    
+    i=0;
+    loop=0;
+    
+    while(input[loop] != '\0')
+    {
+        sprintf((char*)(output+i ),"%02X", input[loop]);
+        loop+=1;
+        i+=2;
+    }
+    //insert NULL at the end of the output string
+    output[i++] = '\0';
+}
 
 
 int main (int argc, char * argv[]) {
@@ -50,7 +118,6 @@ int main (int argc, char * argv[]) {
     struct sockaddr_in server_address;
     char buf[BUFSIZE];
     char tmp_buf[2];
-    char tmp_buf_msg[BUFSIZE];
     int opt;
     int mode = 0;
     int p = -1;
@@ -116,7 +183,7 @@ int main (int argc, char * argv[]) {
     // TODO ověření server hostname a portnumber
 
 
-    //protocol selection
+    //protocol selectionbin_final
 
     //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////
@@ -153,89 +220,78 @@ int main (int argc, char * argv[]) {
     int count_subs = 0;
 
 
-      bzero(buf, BUFSIZE);      
-      printf("Please enter msg: ");
+    bzero(buf, BUFSIZE);      
+    printf("Please enter msg: ");
 
-      // //read line by line and put it to buffer
-      // while(finish_massage != true)
-      // {
-
-
-
-
-      //
-      fgets(buf, BUFSIZE - 3, stdin);
-
-      int a = strlen(buf) + 1;
-      char c = a +'0';
-
-      printf("buffe :%d\n", a );
-
-
-      for(int i = strlen(buf); i >= 0 ; i--){
-        buf[i+2] = buf[i];
-      }
-
-
-      buf[0] ='0';
-      buf[1] = c;
-
-
-        printf(" this is tahat strign: %s \n",buf);
-      
-
-
-
-
-        strcat(tmp_buf,buf);
-
-
+    // -4 je rezerva po posunuti hexa = dva bajty
+    fgets(buf, BUFSIZE -4 , stdin);
+    int lenght_of_input_string = (strlen(buf) * 2) + 1;
 
 
       
+    printf("buffer pred shiftem o 2 do prava :%s\n", buf);
+
+    for(int i = strlen(buf); i >=0; i--){
+      buf[i+2] = buf[i];
+  }
+    
+    buf[0] = 0 + '0';
+    buf[1] = lenght_of_input_string + '0';
+
+    int len = strlen(buf);
+    char hex_str[(len*2)+1];
+
+    string2hexString(buf, hex_str);
+
+    printf("ascii_str: %s\n", buf);
+    printf("hex_str: %s\n", hex_str);
+    printf("buffer po shiftu o 2 do prava :%s\n", buf);
+    printf("buffer po pridani opcodes :%s\n", buf);
+
+    bzero(buf, BUFSIZE);  
 
 
+    printf("Bit hodnota operacniho kodu a payloadu: %X / %X\n\n",hex_str[0], hex_str[1]);
 
-      
+    printf("Bit hodnota operacniho kodu a payloadu: %X / %X\n\n",hex_str[3], hex_str[4]);
+
+    printf("bubber ready >>> %s\n", buf);
+
+  
       if (connect(client_socket, (const struct sockaddr *) &server_address, sizeof(server_address)) != 0)
       {
-      perror("ERROR: connect");
-      exit(EXIT_FAILURE);        
+        perror("ERROR: connect");
+        exit(EXIT_FAILURE);        
       }
 
       /* odeslani zpravy na server */
-      bytestx = send(client_socket,tmp_buf, BUFSIZE, 0);
+      bytestx = send(client_socket,buf, BUFSIZE, 0);
       if (bytestx < 0) 
         perror("ERROR in sendto");
 
-
-      printf("tmp buff velikost %ld :",strlen(buf));
+      
       bzero(buf, BUFSIZE);      
 
-      
-      
+       
       /* prijeti odpovedi a jeji vypsani */
       bytesrx = recv(client_socket, buf, BUFSIZE, 0);
       if (bytesrx < 0) 
         perror("ERROR in recvfrom");
-        
-
-
       
-     
-
 
       printf("Echo from server: %s \n", buf);
 
       int opcode = buf[0];
 
-      printf("BUFFER 1: %c \n", buf[0]);
+      printf("Prvni char prijmute zpravy 0: %d \n", opcode);
+      
+      int opcode1 = buf[1];
 
-      std::string tmpstrings  = std::to_string(opcode);
+      printf("Druhy char prijmute zpravy 1: %d \n", opcode1);
 
-      HexToDec(tmpstrings);
-      printf("BUFFER 1: %d \n", opcode);
+      int opcode2 = buf[2];
 
+      printf("Treti char prijmute zpravy 2: %d \n", opcode2);
           
       close(client_socket);
       return 0;
