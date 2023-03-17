@@ -41,6 +41,18 @@ std::ostringstream oss;
       exit(EXIT_FAILURE);
    }
 
+void decToHexa(int n) { cout << hex << n << endl; } 
+
+void bin(unsigned n)
+{
+    /* step 1 */
+    if (n > 1)
+        bin(n / 2);
+ 
+    /* step 2 */
+    printf("%d", n % 2);
+}
+
 int changeEvenBits(int n)
 {
     // To store sum of bits
@@ -66,30 +78,6 @@ int changeEvenBits(int n)
 }
 
 
-
-char convertToBinary(unsigned int n)
-{
-    int i = 0;
-    char binary_a [9];
-
-    if (n / 2 != 0) {
-        convertToBinary(n / 2);
-        i++;
-    }
-    int str_1 = n % 2;
-    char nuller[1] = {str_1 +'0'};
-    strcat(binary_a, nuller);
-    i++;
-
-    if(i >= 8){
-    
-    char bin_final = strtol(binary_a, 0, 2);
-
-    return bin_final;
-    
-
-    }
-}
 
 void string2hexString(char* input, char* output)
 {
@@ -233,39 +221,85 @@ int main (int argc, char * argv[]) {
 
     for(int i = strlen(buf); i >=0; i--){
       buf[i+2] = buf[i];
-  }
+    }
+
     
-    buf[0] = 0 + '0';
-    buf[1] = lenght_of_input_string + '0';
+
+
+    printf("prvni char %x :\n", buf[0]);
+    bin(buf[0]);
+    printf("\n");
+    bin(4);
+    // buf[1] = lenght_of_input_string + '0';
+
+    decToHexa(lenght_of_input_string);
+
+    
 
     int len = strlen(buf);
     char hex_str[(len*2)+1];
+    bzero(hex_str, strlen(hex_str));
 
     string2hexString(buf, hex_str);
 
-    printf("ascii_str: %s\n", buf);
-    printf("hex_str: %s\n", hex_str);
-    printf("buffer po shiftu o 2 do prava :%s\n", buf);
-    printf("buffer po pridani opcodes :%s\n", buf);
+    unsigned char hex_value[strlen(buf) + 1];
 
-    bzero(buf, BUFSIZE);  
+    buf[0] = (unsigned char) '0';
+    buf[1] = (unsigned char) '28';
+
+    for(int i = 0; i <= strlen(buf)+1 ; i++){
+        hex_value[i] = (unsigned char) buf[i];
+    }
+    // hex_value[1] = (unsigned char) '28';
+
+    printf("pole hex filu : %c \n", hex_value[1]);
 
 
-    printf("Bit hodnota operacniho kodu a payloadu: %X / %X\n\n",hex_str[0], hex_str[1]);
 
-    printf("Bit hodnota operacniho kodu a payloadu: %X / %X\n\n",hex_str[3], hex_str[4]);
+    // hex_str[0] = '\x00' ;
+    // // unsigned char hex_value = (unsigned char) 10;
+    // // sprintf(hex_str[1], "%08X", 10);
+    // printf("hex_char 1: %x\n", hex_str[0]);
+    // printf("hex_char 1: %x\n", hex_str[1]);
+    
+    // hex_str[0]= '0';
+    // hex_str[1]= 'lenght_of_input_string';
 
-    printf("bubber ready >>> %s\n", buf);
 
-  
+
+    
+
+
+    // printf("ascii_str: %s\n", buf);
+    // for (int i = 0 ; i< strlen(hex_str); i++){
+    //     printf("hex_char 1: %d\n", hex_str[i]);
+    // }
+
+
+    // printf("string: %s\n", hex_str);
+    // printf("buffer po shiftu o 2 do prava :%s\n", buf);
+    // printf("buffer po pridani opcodes :%s\n", buf);
+
+    // bzero(buf, BUFSIZE);  
+
+
+    // printf("Bit hodnota operacniho kodu a payloadu: %X / %X\n\n",hex_str[0], hex_str[1]);
+
+    // printf("Bit hodnota operacniho kodu a payloadu: %X / %X\n\n",hex_str[3], hex_str[4]);
+
+    // printf("bubber ready >>> %s\n", buf);
+
+    printf("penis\n");
+
       if (connect(client_socket, (const struct sockaddr *) &server_address, sizeof(server_address)) != 0)
       {
         perror("ERROR: connect");
         exit(EXIT_FAILURE);        
       }
+      
 
       /* odeslani zpravy na server */
-      bytestx = send(client_socket,buf, BUFSIZE, 0);
+      bytestx = send(client_socket,hex_value, BUFSIZE, 0);
       if (bytestx < 0) 
         perror("ERROR in sendto");
 
