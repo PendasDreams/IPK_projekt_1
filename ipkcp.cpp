@@ -18,10 +18,23 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <iostream>
+#include <sstream>
+using namespace std;
+std::ostringstream oss;
+
+
+
 
 #define BUFSIZE 1024
 #define TCP_MODE 1
 #define UDP_MODE 2
+
+   
+   int print_error_parsing_argument(char* argv[]){
+      fprintf(stderr, "usage: %s ipkcpc -h <host> -p <port> -m <mode>\n", argv[0]);
+      exit(EXIT_FAILURE);
+   }
 
 
 
@@ -41,29 +54,15 @@ int main (int argc, char * argv[]) {
     int h = -1;
     int m = -1;
 
-   
-   int print_error_parsing_argument(){
-      fprintf(stderr, "usage: %s ipkcpc -h <host> -p <port> -m <mode>\n", argv[0]);
-      exit(EXIT_FAILURE);
-   }
 
-   int countString(const char *haystack, const char *needle){
-      int count = 0;
-      const char *tmp = haystack;
-      while(tmp = strstr(tmp, needle))
-      {
-          count++;
-          tmp++;
-      }
-      return count;
-}
+
 
 
 
     /* 1. test vstupnich parametru: */
 
     if (argc != 7) {
-       print_error_parsing_argument();
+       print_error_parsing_argument(argv);
     }
 
     while ((opt = getopt(argc, argv, "h:p:m:")) != -1) {
@@ -89,25 +88,25 @@ int main (int argc, char * argv[]) {
                 }
                 else{
                   printf("protokol byl zadán špatně\n");
-                  print_error_parsing_argument();
+                  print_error_parsing_argument(argv);
                 }
                 break;  
         default:
-            print_error_parsing_argument();
+            print_error_parsing_argument(argv);
         }
     }
 
     if(p == -1){
       printf("argument -p je povinný");
-      print_error_parsing_argument();
+      print_error_parsing_argument(argv);
     }
     if(h == -1){
       printf("argument -h je povinný");
-      print_error_parsing_argument();
+      print_error_parsing_argument(argv);
     }
     if(m == -1){
       printf("argument -m je povinný");
-      print_error_parsing_argument();
+      print_error_parsing_argument(argv);
     }
 
 
@@ -154,29 +153,41 @@ int main (int argc, char * argv[]) {
       bzero(buf, BUFSIZE);      
       printf("Please enter msg: ");
 
-      //read line by line and put it to buffer
-      while(finish_massage != true)
-      {
-        fgets(tmp_buf, BUFSIZE, stdin);
+      // //read line by line and put it to buffer
+      // while(finish_massage != true)
+      // {
+      fgets(tmp_buf, 1008, stdin);
 
-        if(tmp_buf[0] =='\n'){
-          strcat(buf, tmp_buf);
-          break;
-        }
+      //   if(tmp_buf[0] =='\n'){
+      //     strcat(buf, tmp_buf);
+      //     break;
+      //   }
 
-        strcat(tmp_buf_msg, tmp_buf);
-        memset(tmp_buf,0,sizeof(tmp_buf));
-      }
+      //   strcat(tmp_buf_msg, tmp_buf);
+      //   memset(tmp_buf,0,sizeof(tmp_buf));
+      // }
 
 
-      int a = 23;
-      char c = a+'0';
+      int a = 6;
+      char c = a +'0';
 
-      buf[0] ='1';
+      buf[0] ='0';
       buf[1] = c;
 
+      //strcat(buf,"06HELLO");
 
-      strcat(buf, tmp_buf_msg);
+
+        printf(" this is tahat strign: %s \n",buf);
+      
+
+
+
+
+
+
+
+
+
 
 
 
@@ -192,15 +203,22 @@ int main (int argc, char * argv[]) {
       }
 
       /* odeslani zpravy na server */
-      bytestx = send(client_socket, buf, strlen(buf), 0);
+      bytestx = send(client_socket,"09(+ 1 2)\n", 9, 0);
       if (bytestx < 0) 
         perror("ERROR in sendto");
       
       /* prijeti odpovedi a jeji vypsani */
-      bytesrx = recv(client_socket, buf, BUFSIZE, 0);
+      bytesrx = recv(client_socket, buf, 16, 0);
       if (bytesrx < 0) 
         perror("ERROR in recvfrom");
         
+
+
+      
+      // for(int i = 0; i<= BUFSIZE; i++){
+      //   printf("this is printed %c \n", buf[i]);
+      // }
+
       printf("Echo from server: %s", buf);
           
       close(client_socket);
