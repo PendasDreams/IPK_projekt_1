@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include <iostream>
 #include <sstream>
+#include <bits/stdc++.h>
 using namespace std;
 std::ostringstream oss;
 
@@ -37,6 +38,8 @@ std::ostringstream oss;
    }
 
 
+int HexToDec(string n) { return stoi(n, 0, 16); }
+
 
 
 int main (int argc, char * argv[]) {
@@ -46,7 +49,7 @@ int main (int argc, char * argv[]) {
     struct hostent *server;
     struct sockaddr_in server_address;
     char buf[BUFSIZE];
-    char tmp_buf[BUFSIZE];
+    char tmp_buf[2];
     char tmp_buf_msg[BUFSIZE];
     int opt;
     int mode = 0;
@@ -156,25 +159,26 @@ int main (int argc, char * argv[]) {
       // //read line by line and put it to buffer
       // while(finish_massage != true)
       // {
-      fgets(tmp_buf, 1008, stdin);
-
-      //   if(tmp_buf[0] =='\n'){
-      //     strcat(buf, tmp_buf);
-      //     break;
-      //   }
-
-      //   strcat(tmp_buf_msg, tmp_buf);
-      //   memset(tmp_buf,0,sizeof(tmp_buf));
-      // }
 
 
-      int a = 6;
+
+
+      //
+      fgets(buf, BUFSIZE - 3, stdin);
+
+      int a = strlen(buf) + 1;
       char c = a +'0';
+
+      printf("buffe :%d\n", a );
+
+
+      for(int i = strlen(buf); i >= 0 ; i--){
+        buf[i+2] = buf[i];
+      }
+
 
       buf[0] ='0';
       buf[1] = c;
-
-      //strcat(buf,"06HELLO");
 
 
         printf(" this is tahat strign: %s \n",buf);
@@ -183,10 +187,7 @@ int main (int argc, char * argv[]) {
 
 
 
-
-
-
-
+        strcat(tmp_buf,buf);
 
 
 
@@ -203,23 +204,38 @@ int main (int argc, char * argv[]) {
       }
 
       /* odeslani zpravy na server */
-      bytestx = send(client_socket,"09(+ 1 2)\n", 9, 0);
+      bytestx = send(client_socket,tmp_buf, BUFSIZE, 0);
       if (bytestx < 0) 
         perror("ERROR in sendto");
+
+
+      printf("tmp buff velikost %ld :",strlen(buf));
+      bzero(buf, BUFSIZE);      
+
+      
       
       /* prijeti odpovedi a jeji vypsani */
-      bytesrx = recv(client_socket, buf, 16, 0);
+      bytesrx = recv(client_socket, buf, BUFSIZE, 0);
       if (bytesrx < 0) 
         perror("ERROR in recvfrom");
         
 
 
       
-      // for(int i = 0; i<= BUFSIZE; i++){
-      //   printf("this is printed %c \n", buf[i]);
-      // }
+     
 
-      printf("Echo from server: %s", buf);
+
+      printf("Echo from server: %s \n", buf);
+
+      int opcode = buf[0];
+
+      printf("BUFFER 1: %c \n", buf[0]);
+
+      std::string tmpstrings  = std::to_string(opcode);
+
+      HexToDec(tmpstrings);
+      printf("BUFFER 1: %d \n", opcode);
+
           
       close(client_socket);
       return 0;
