@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main() {
+    char buffer[1000];
+    int new_lines = 0;
+    while (new_lines < 2) {
+        // Read a line of input from stdin
+        if (fgets(buffer, sizeof buffer, stdin) == NULL) {
+            // End of input (or error), exit the loop
+            break;
+        }
+        // Check if the line contains only new line characters
+        int is_empty = 1;
+        for (int i = 0; buffer[i] != '\0'; i++) {
+            if (buffer[i] != '\n' && buffer[i] != '\r') {
+                is_empty = 0;
+                break;
+            }
+        }
+        if (is_empty) {
+            new_lines++;
+        } else {
+            // Print the line to stdout (without new line characters)
+            printf("%s", buffer);
+        }
+    }
+    return 0;
+}
