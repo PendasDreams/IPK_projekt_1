@@ -6,7 +6,7 @@
  * Ondrej Rysavy (rysavy@fit.vutbr.cz)
  *
  */
- 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,19 +24,33 @@
 #include <bits/stdc++.h>
 #include <bitset>
 #include <math.h>
+#include <setjmp.h>
+#include <unistd.h>
 
 
 #define BUFSIZE 1024
 
+static volatile int keeprunning = 1;
+int client_socket, port_number, bytestx, bytesrx;
+socklen_t serverlen;
+const char *server_hostname;
+struct hostent *server;
+struct sockaddr_in server_address;
+char buf[BUFSIZE];
+
+void Handler(int dummy){
+    printf("\nwear\n");
+    keeprunning = 0;
+    close(client_socket);
+    exit(0);
+}
+
+
 int main (int argc, const char * argv[]) {
-	int client_socket, port_number, bytestx, bytesrx;
-    socklen_t serverlen;
-    const char *server_hostname;
-    struct hostent *server;
-    struct sockaddr_in server_address;
-    char buf[BUFSIZE];
+
+signal(SIGINT, Handler);
+
     
-     
     /* 1. test vstupnich parametru: */
     if (argc != 3) {
        fprintf(stderr,"usage: %s <hostname> <port>\n", argv[0]);
@@ -67,12 +81,28 @@ int main (int argc, const char * argv[]) {
 		perror("ERROR: socket");
 		exit(EXIT_FAILURE);
 	}
+
 	    
+    
     /* nacteni zpravy od uzivatele */
     bzero(buf, BUFSIZE);
     printf("Please enter msg: ");
 
+    int new_lines = 0;
+
+    
+
+
+    while (keeprunning) {
+
+
     fgets(buf, BUFSIZE, stdin);
+
+    if(keeprunning == 0){
+        close(client_socket);
+        return 0;
+    }
+    
     int lenght_of_input_string = (strlen(buf) - 1);
 
     unsigned char tmp_buf[lenght_of_input_string + 2];
@@ -88,16 +118,6 @@ int main (int argc, const char * argv[]) {
         buffer_na_check[i] = buf[i-2];
     }
 
-    printf("delka stringu= %d\n", lenght_of_input_string);
-
-    for(int i = 0; i < lenght_of_input_string + 2; i++){
-        printf("char from buf[%d]: %x\n", i, tmp_buf[i]);
-    }
-
-
-
-
-
     /* odeslani zpravy na server */
     serverlen = sizeof(server_address);
     bytestx = sendto(client_socket, tmp_buf, lenght_of_input_string + 2, 0, (struct sockaddr *) &server_address, serverlen);
@@ -109,34 +129,20 @@ int main (int argc, const char * argv[]) {
     if (bytesrx < 0) 
         perror("ERROR: recvfrom");
 
-    for(int i = 0; i < 5; i++){
-        printf("Echo from server(hex)  : %x\n", tmp_buf[i]);
-        printf("Echo from server(int)  : %d\n", tmp_buf[i]);
-        printf("Echo from server(char) : %c\n", tmp_buf[i]);
-    }
-
-
     
-
-
     if(tmp_buf[1] == 0){
         printf("OK:");
-            for(int i = 3; i < tmp_buf[2]+3; i++){
-                printf("%c", tmp_buf[i]);
-            }
-        
+        for(int i = 3; i < tmp_buf[2]+3; i++){
+            printf("%c", tmp_buf[i]);
+        }
+        printf("\n");        
     }
     
     if(tmp_buf[1] == 1){
         printf("ERR:<something went wrong>\n");
     }
 
-
-
-
-    
-
-    
-    
+    }
     return 0;
+    
 }
