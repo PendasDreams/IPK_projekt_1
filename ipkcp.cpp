@@ -116,6 +116,7 @@ signal(SIGINT, Handler);
         while (keeprunning) {
             /* nacteni zpravy od uzivatele */
             bzero(buf, BUFSIZE);
+            printf("YOU: ");
             fgets(buf, BUFSIZE, stdin);
 
             // overeni delky stringu aby nebyl vetsi nez buffer
@@ -195,6 +196,7 @@ signal(SIGINT, Handler);
 
             // vynuloavni a nacteni do bufferu
             bzero(buf, BUFSIZE);
+            printf("YOU: ");
             fgets(buf, BUFSIZE, stdin);
 
 
@@ -216,7 +218,7 @@ signal(SIGINT, Handler);
             if (bytesrx < 0){
                 perror("ERROR in recvfrom");
             }
-            printf("%s", buf);
+            printf("SERVER: %s", buf);
             
             //po odeslani zpravy BYE je ocekavana zprava BYE ktera prijde ze serveru zpet
             if (strcmp(buf, "BYE\n") == 0){
