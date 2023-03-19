@@ -1,16 +1,13 @@
 /*
- * IPK.2015L
- *
- * Demonstration of trivial UDP communication.
- *
- * Ondrej Rysavy (rysavy@fit.vutbr.cz)
- *
+ * @author xnovos14
+ * @name   Denis Novosad
  */
+
+
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
@@ -18,14 +15,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include <iostream>
-#include <sstream>
-#include <bits/stdc++.h>
-#include <bits/stdc++.h>
-#include <bitset>
 #include <math.h>
-#include <setjmp.h>
-#include <unistd.h>
 
 
 #define BUFSIZE 1024
@@ -42,24 +32,25 @@ char buf[BUFSIZE];
 int opt;
 int mode = 0;
 
-void Handler(int dummy){
+
+// funkce na zachyceni klavesy ctrl+C
+void Handler(int signaling){
     printf("\n\nclosing conneciton\n");
     keeprunning = 0;
     close(client_socket);
     exit(0);
 }
 
+// funkce na vypis chyby pri spatne zadanycha argumentech + ukonceni programu
 int print_error_parsing_argument(char* argv[]){
     fprintf(stderr, "usage: %s ipkcpc -h <host> -p <port> -m <mode>\n", argv[0]);
     exit(EXIT_FAILURE);
 }
 
-
 int main (int argc, char * argv[]) {
 
 signal(SIGINT, Handler);
-
-    
+ 
     /* 1. test vstupnich parametru: */
     if (argc != 7) {
        print_error_parsing_argument(argv);
@@ -93,9 +84,6 @@ signal(SIGINT, Handler);
         }
     }
 
-
-
-
     /* 2. ziskani adresy serveru pomoci DNS */
     
     if ((server = gethostbyname(server_hostname)) == NULL) {
@@ -112,43 +100,46 @@ signal(SIGINT, Handler);
     /* tiskne informace o vzdalenem soketu */ 
     printf("INFO: Server socket: %s : %d \n", inet_ntoa(server_address.sin_addr), ntohs(server_address.sin_port));
     
-    
-
+    // komunikace se serverem prostrednictvim UDP
     if(mode == UDP_MODE){
     
-    /* Vytvoreni soketu */
-	if ((client_socket = socket(AF_INET, SOCK_DGRAM, 0)) <= 0)
-	{
-		perror("ERROR: socket");
-		exit(EXIT_FAILURE);
-	}
+        /* Vytvoreni soketu */
+        if ((client_socket = socket(AF_INET, SOCK_DGRAM, 0)) <= 0)
+        {
+            perror("ERROR: socket");
+            exit(EXIT_FAILURE);
+        }
 
-    /* nacteni zpravy od uzivatele */
-    bzero(buf, BUFSIZE);
-    printf("Please enter msg: ");
+        printf("YOU CAN START COMUNICATION!\n");
 
-
- 
+        // cyklus na naciania a nasledne odesilani zprav serveru
         while (keeprunning) {
-
+            /* nacteni zpravy od uzivatele */
             bzero(buf, BUFSIZE);
             fgets(buf, BUFSIZE, stdin);
 
+            // overeni delky stringu aby nebyl vetsi nez buffer
+            if(strlen(buf) > BUFSIZE){
+                perror("ERROR: too long input string");
+                exit(EXIT_FAILURE);
+            }
+
+            // delka vstupniho retezce muze byt 1024 znaku
             int lenght_of_input_string = (strlen(buf) - 1);
 
+            // pole pro hexadecimalni hodnoty
             unsigned char tmp_buf[lenght_of_input_string + 2];
 
             printf(" ");
 
-
+            // vlozeni opcodu 
             tmp_buf[0] = 0x00;
+            // vlozeni delky posilaneho retezce
             tmp_buf[1] = lenght_of_input_string ;
-            char buffer_na_check[lenght_of_input_string + 2];
 
-
+            // vlozeni hexadecimalnich hodnot do bufferu
             for(int i = 2; i < lenght_of_input_string + 2; i++ ){
                 tmp_buf[i] = buf[i-2];
-                buffer_na_check[i] = buf[i-2];
             }
 
             /* odeslani zpravy na server */
@@ -162,7 +153,7 @@ signal(SIGINT, Handler);
             if (bytesrx < 0) 
                 perror("ERROR: recvfrom");
 
-            
+            // vypis kdyz zprava prisla s operacnim kodem ze vse probehlo v poradku
             if(tmp_buf[1] == 0){
                 printf("OK:");
                 for(int i = 3; i < tmp_buf[2]+3; i++){
@@ -170,43 +161,49 @@ signal(SIGINT, Handler);
                 }
                 printf("\n");        
             }
-            
+        
+           // vypis kdyz zprava prisla s operacnim kodem ze nastala chyba
             if(tmp_buf[1] == 1){
-                printf("ERR:<something went wrong>\n");
+                perror("ERR FROM SERVER:<something went wrong, try check your syntax and lenght of your message>\n");
             }
-
-        }
-
-            
+        }         
     }
 
+    // komunikace se serverem prostrednictvim TCP
     else if (mode == TCP_MODE){
 
+        /* Vytvoreni soketu */
+        if ((client_socket = socket(AF_INET, SOCK_STREAM, 0)) <= 0)
+        {
+            perror("ERROR: socket");
+            exit(EXIT_FAILURE);
+        }
+        
+        /* nacteni zpravy od uzivatele */
+        bzero(buf, BUFSIZE);
+        // pripojeni se k serveru prostrednictvim TCP
+        if (connect(client_socket, (const struct sockaddr *) &server_address, sizeof(server_address)) != 0)
+        {
+            perror("ERROR: connect");
+            exit(EXIT_FAILURE);        
+        }
 
-    
-    /* Vytvoreni soketu */
-	if ((client_socket = socket(AF_INET, SOCK_STREAM, 0)) <= 0)
-	{
-		perror("ERROR: socket");
-		exit(EXIT_FAILURE);
-	}
-    
-	    
-    /* nacteni zpravy od uzivatele */
-    bzero(buf, BUFSIZE);
-    printf("Please enter msg: ");
-    
-    if (connect(client_socket, (const struct sockaddr *) &server_address, sizeof(server_address)) != 0)
-    {
-		perror("ERROR: connect");
-		exit(EXIT_FAILURE);        
-    }
+        printf("YOU CAN START COMUNICATION!\n");
 
-    
-       while(true){
+        // cyklus na naciania a nasledne odesilani zprav serveru
+        while(keeprunning){
+
+            // vynuloavni a nacteni do bufferu
             bzero(buf, BUFSIZE);
             fgets(buf, BUFSIZE, stdin);
-            
+
+
+            // overeni delky stringu aby nebyl vetsi nez buffer
+            if(sizeof(buf) > BUFSIZE){
+                perror("ERROR: too long input string");
+                exit(EXIT_FAILURE);
+            }
+
             /* odeslani zpravy na server */
             bytestx = send(client_socket, buf, strlen(buf), 0);
             if (bytestx < 0){
@@ -219,19 +216,19 @@ signal(SIGINT, Handler);
             if (bytesrx < 0){
                 perror("ERROR in recvfrom");
             }
-            
             printf("%s", buf);
+            
+            //po odeslani zpravy BYE je ocekavana zprava BYE ktera prijde ze serveru zpet
             if (strcmp(buf, "BYE\n") == 0){
                     close(client_socket);
                     exit(EXIT_SUCCESS);
             }
         }   
-
-
     }
 
     else{
-        printf("ERR: something went wrong mode was not selected");
+        perror("ERROR: SOME ERROR OCURED");
+		exit(EXIT_FAILURE);
     }
     return 0;
 
