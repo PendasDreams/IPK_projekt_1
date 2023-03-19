@@ -190,6 +190,7 @@ signal(SIGINT, Handler);
 		perror("ERROR: socket");
 		exit(EXIT_FAILURE);
 	}
+    
 	    
     /* nacteni zpravy od uzivatele */
     bzero(buf, BUFSIZE);
