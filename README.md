@@ -41,7 +41,7 @@ UDP
 Formát zprávy je matematický výraz v notaci ABNF
 
 TCP
-Komunikace začíná zprávou HELLO, po přijmutí stejné zprávy od serveru může uživatel Využívat příkaz SOLVE za kterým následuje matematický výraz v ABNF notaci, přičemž server vrací výsledek. 
+Komunikace začíná zprávou HELLO, po přijmutí stejné zprávy od serveru může uživatel využívat příkaz SOLVE, za kterým následuje matematický výraz v ABNF notaci, přičemž server vrací výsledek. 
 
 ## Průbeh programu po spuštění
 
