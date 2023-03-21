@@ -35,6 +35,14 @@ Poté už je klient připraven k používání. Spuštění se provede:
 `ipkcpc -h <host> -p <port> -m <mode>`
 Přičemž host je IPV4 adresa serveru, mode je varianta protokolu UDP/TCP a port je port serveru.
 
+## Komunikace se servery
+
+UDP
+Formát zprávy je matematický výraz v notaci ABNF
+
+TCP
+Komunikace začíná zprávou HELLO, po přijmutí stejné zprávy od serveru může uživatel Využívat příkaz SOLVE za kterým následuje matematický výraz v ABNF notaci, přičemž server vrací výsledek. 
+
 ## Průbeh programu po spuštění
 
 Po spuštění programu následuje kontrola argumentů, tuto kontrolu zajišťuje funkce getopt(), a při špatně zadaných argumentech vypíše syntax používání programu.
