@@ -81,7 +81,7 @@ Ukončení programu je možné pomocí klávesové zkratky CTRL+C, nebo odesán�
 
 V repozitáři se nacházi .pdf soubor obsahující testování programu.
 
-Zdroje: Třetí přednáška z iPK 2023.
+Zdroje: Třetí přednáška z iPK 2023. https://moodle.vut.cz/mod/folder/view.php?id=289124
 
 
 
