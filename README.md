@@ -11,20 +11,29 @@ zazipovat <br />
 
 
 
-Client pro IPK Calculator protocol
+## Client pro IPK Calculator protocol
+
 ipkcp je jednoduchý client, který dokáže komunikovat prostřednictvím TCP i UDP podle zvolené varianty uživatelem. Byl vyvíjený v jazyce C.
 
-Prerekvizity
+## Prerekvizity
+
 Program byl vyvíjený na Linux Ubuntu 20.00
 
-G++ na překlad zdrojového kódu
-Linux terminál - pro přeložení, spuštění a používání
-Server používající IPKCP(IPK Calculator Protocol)
-Spuštění a používání
-V repozitáři se nachází makefile, který po zadání příkazu make.
+- G++ na překlad zdrojového kódu
+- Linux terminál - pro přeložení, spuštění a používání
+- Server používající IPKCP(IPK Calculator Protocol)
 
+## Spuštění a používání
+
+V repozitáři se nachází makefile, který po zadání příkazu make. 
+
+```
 make
-Poté už je klient připraven k používání. Spuštění se provede: ipkcpc -h <host> -p <port> -m <mode> Přičemž host je IPV4 adresa serveru, mode je varianta protokolu UDP/TCP a port je port serveru.
+```
+
+Poté už je klient připraven k používání. Spuštění se provede: 
+`ipkcpc -h <host> -p <port> -m <mode>`
+Přičemž host je IPV4 adresa serveru, mode je varianta protokolu UDP/TCP a port je port serveru.
 
 
 
