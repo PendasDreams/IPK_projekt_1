@@ -65,7 +65,12 @@ Komunikace se ukončuje klávesovou zkratkou CTRL+C, tuto skutečnost zajištuje
 
 ## TCP
 
-Komunikaci opět zajištujě cyklus while
+Komunikaci opět zajištujě cyklus while.
+Zde proběhne inicializace pole buf.
+Pomocí funkce fgets(), se získá zpáva od uživatele, a nahraje se do pole buf, následně se odešle pomocí funkce send(), a odpověď se získá pomocí funkce recv(). Odpověď je nahrána do pole buf a poté je vypsána uživateli.
+
+Ukončení programu je možné pomocí klávesové zkratky CTRL+C, nebo odesání zprávy serveru, ve tvaru "BYE".
+
 
 
 
