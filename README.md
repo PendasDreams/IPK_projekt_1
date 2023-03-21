@@ -68,7 +68,7 @@ Poté je přečten ze zprávy operační kód 1 nebo 0. V případě 0 proběhlo
 
 Pokud vše proběhne v pořádku vrací se program na začátek cyklu a komunikace se opakuje.
 
-Komunikace se ukončuje klávesovou zkratkou CTRL+C, tuto skutečnost zajištuje v programu funkce signal(), která klávesovou zkratku zachytí a následně je ukončeno spojení se serverem funkcí close() a program je ukončen.
+Komunikace se ukončuje klávesovou zkratkou CTRL+C, tuto skutečnost zajištuje v programu funkce signal(), která klávesovou zkratku zachytí a následně je ukončeno spojení se serverem funkcí close() a program je ukončeno.
 
 
 ## TCP
