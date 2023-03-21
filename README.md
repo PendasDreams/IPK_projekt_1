@@ -17,7 +17,7 @@ ipkcp je jednoduchý client, který dokáže komunikovat prostřednictvím TCP i
 
 ## Prerekvizity
 
-Program byl vyvíjený na Linux Ubuntu 20.00
+Program byl vyvíjený na Linux Ubuntu 20.04
 
 - G++ na překlad zdrojového kódu
 - Linux terminál - pro přeložení, spuštění a používání
