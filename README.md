@@ -25,7 +25,7 @@ Program byl vyvíjený na Linux Ubuntu 20.04
 
 ## Spuštění a používání
 
-V repozitáři se nachází makefile, který po zadání příkazu make. 
+V repozitáři se nachází makefile, který po zadání příkazu make provede překlad programu.
 
 ```
 make
