@@ -79,7 +79,9 @@ Pomocí funkce fgets(), se získá zpáva od uživatele, a nahraje se do pole bu
 
 Ukončení programu je možné pomocí klávesové zkratky CTRL+C, nebo odesání zprávy serveru, ve tvaru "BYE". Poté je spojení ukončení funkcí close();
 
+V repozitáři se nacházi .pdf soubor obsahující testování programu.
 
+Zdroje: Třetí přednáška z iPK 2023.
 
 
 
